@@ -1,10 +1,11 @@
 package com.company.controller;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import com.company.entity.ProductEntity;
 import com.company.model.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.model.Product;
 import com.company.service.ProductService;
 
 @RestController
@@ -52,7 +51,7 @@ public class ProductController {
 			)
 	})
 	@GetMapping("")
-	List<Product> getProducts() {
+	List<ProductEntity> getProducts() {
 		return productService.getProducts();
 	}
 
@@ -74,8 +73,9 @@ public class ProductController {
 			)
 	})
 	@GetMapping("/{id}")
-	public Product getProduct(@PathVariable("id") Long id) {
-		return productService.getProduct(id);
+	public ResponseEntity<Optional<ProductEntity>> getProduct(@PathVariable("id") Long id) {
+		Optional<ProductEntity> product= productService.getProduct(id);
+		return new ResponseEntity<>(product,HttpStatus.ACCEPTED);
 	}
 
 	@Operation(
@@ -96,14 +96,11 @@ public class ProductController {
 			)
 	})
 	@PostMapping(value = "")
-	public Map<String, Object> createProduct(@RequestParam(value = "id") Long id,
-			@RequestParam(value = "name") String name, @RequestParam(value = "price") Integer price) {
+	public void createProduct(@RequestBody ProductEntity productEntity) {
 
-		productService.createProduct(id, name, price);
+		productService.createProduct(productEntity);
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("status", "Product added!");
-		return map;
+
 	}
 
 
@@ -129,9 +126,9 @@ public class ProductController {
 			)
 	})
 	@PutMapping(value = "")
-	public Product updateProductUsingJson(@RequestBody Product product) {
+	public ResponseEntity<ProductEntity> updateProductUsingJson(@RequestBody ProductEntity product) {
 		productService.updateProduct(product);
-		return product;
+		return new ResponseEntity<>(product,HttpStatus.ACCEPTED);
 	}
 
 	@Operation(summary = "Delete a Product", description = "Delete a Product by their ID")

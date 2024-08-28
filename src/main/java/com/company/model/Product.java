@@ -2,50 +2,23 @@ package com.company.model;
 
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.*;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Tag(
 		name = "CRUD REST API for Product",
 		description = "CRUD REST APIs for Product to CREATE, UPDATE, FETCH AND DELETE product details"
 )
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Product {
-
-	private Product() {
-		super();
-	}
-
-	public Product(Long productID, String productName, Integer productPrice) {
-		super();
-		this.productID = productID;
-		this.productName = productName;
-		this.productPrice = productPrice;
-	}
-
 	private Long productID;
 	private String productName;
-	private Integer productPrice;
-
-	public Long getProductID() {
-		return productID;
-	}
-
-	public void setProductID(Long productID) {
-		this.productID = productID;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-	public Integer getProductPrice() {
-		return productPrice;
-	}
-
-	public void setProductPrice(Integer productPrice) {
-		this.productPrice = productPrice;
-	}
+	private double productPrice;
 
 }

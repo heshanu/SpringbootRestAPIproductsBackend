@@ -1,13 +1,14 @@
 package com.company.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import com.company.model.Product;
+import com.company.entity.ProductEntity;
 
 public interface ProductService {
-	List<Product> getProducts();
-	Product getProduct(Long id);
-	void createProduct(Long productID, String productName, Integer price);
-	void updateProduct(Product product);
+	List<ProductEntity> getProducts();
+	Optional<ProductEntity> getProduct(Long id);
+	void createProduct(ProductEntity productEntity);
+	void updateProduct(ProductEntity productEntity);
 	void deleteProduct(Long id);
 }
