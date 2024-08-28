@@ -1,5 +1,12 @@
 package com.company.model;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(
+		name = "CRUD REST API for Product",
+		description = "CRUD REST APIs for Product to CREATE, UPDATE, FETCH AND DELETE product details"
+)
 public class Product {
 
 	private Product() {

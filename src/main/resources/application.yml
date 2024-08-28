@@ -13,3 +13,20 @@ spring:
     hibernate:
       ddl-auto: update
   application:
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    doc-expansion: none
+    deepLinking: true
+    displayRequestDuration: true
+    defaultModelsExpandDepth: 1
+    defaultModelExpandDepth: 1
+    displayOperationId: true
+    defaultModelRendering: example
+    showExtensions: true
+    showCommonExtensions: true
+    tagsSorter: alpha
+    operationsSorter: alpha
+    supportedSubmitMethods: []
+
