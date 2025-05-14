@@ -3,61 +3,55 @@ package com.company.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.company.model.Product;
+import com.company.entity.ProductEntity;
 import com.company.service.ProductService;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("api/v1/product")
 public class ProductController {
 
 	@Autowired
 	ProductService productService;
 
 	@GetMapping("")
-	List<Product> getProducts() {
+	List<ProductEntity> getProducts() {
 		return productService.getProducts();
 	}
-
 	@GetMapping("/{id}")
-	public Product getProduct(@PathVariable("id") Long id) {
-		return productService.getProduct(id);
+	public ResponseEntity<ProductEntity> getProduct(@PathVariable("id") Long id) {
+		Optional<ProductEntity> product = productService.getProduct(id);
+		if (product != null) {
+			return new ResponseEntity(product, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@PostMapping(value = "")
-	public Map<String, Object> createProduct(@RequestParam(value = "id") Long id,
-			@RequestParam(value = "name") String name, @RequestParam(value = "price") Integer price) {
-
-		productService.createProduct(id, name, price);
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("status", "Product added!");
-		return map;
+	public ResponseEntity<String> createProduct(@RequestBody ProductEntity product) {
+		String result = productService.createProduct(product);
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = "")
-	public Product updateProductUsingJson(@RequestBody Product product) {
-		productService.updateProduct(product);
-		return product;
+	public ResponseEntity<ProductEntity> updateProductUsingJson(@RequestBody ProductEntity product) {
+		ProductEntity updatedProduct = productService.updateProduct(product);
+		return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-	public Map<String, Object> deleteProduct(@PathVariable("id") Long id) {
+	public ResponseEntity<Map<String, Object>> deleteProduct(@PathVariable("id") Long id) {
 		productService.deleteProduct(id);
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("status", "Product deleted!");
-		return map;
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
+
 }
