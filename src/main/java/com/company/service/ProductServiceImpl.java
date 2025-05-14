@@ -1,55 +1,64 @@
 package com.company.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
+import com.company.repo.ProductRepo;
 import org.springframework.stereotype.Service;
 
-import com.company.model.Product;
+import com.company.entity.ProductEntity;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-	public ProductServiceImpl() {
+	private final ProductRepo productRepo;
 
-		products.add(new Product(1l, "iphone", 1999));
-		products.add(new Product(2l, "speaker", 599));
-		products.add(new Product(3l, "book", 99));
+	public ProductServiceImpl(ProductRepo productRepo) {
+		this.productRepo = productRepo;
 	}
 
-	List<Product> products = new ArrayList<Product>();
+	public List<ProductEntity> getProducts() {
 
-	public List<Product> getProducts() {
-		return products;
+		List<ProductEntity> allProductList=productRepo.findAll();
+		return allProductList;
 	}
 
-	public Product getProduct(Long id) {
-		Iterator<Product> iterator = products.iterator();
-		while (iterator.hasNext()) {
-			Product product = iterator.next();
-			if (product.getProductID().equals(id)) {
-				return product;
+	@Override
+	public Optional<ProductEntity> getProduct(Long id) {
+		Optional<ProductEntity> selectedProduct=productRepo.findById(id);
+		return selectedProduct;
+	}
+
+	@Override
+	public String  createProduct(ProductEntity product) {
+			if(product!=null) {
+			productRepo.save(product);
+			return "Successfully created product:"+product.getProductID();
 			}
+			//ProductEntity newProduct=productRepo.getById(product.getProductID());
+			return "Unable to create product:"+product.getProductID();
+	}
+
+	public ProductEntity updateProduct(ProductEntity product) {
+			Optional<ProductEntity> prevProduct=productRepo.findById(product.getProductID());
+			if(prevProduct.isPresent()){
+				ProductEntity updateProduct=ProductEntity.builder()
+							.productID(product.getProductID())
+							.productPrice(product.getProductPrice())
+							.productName(product.getProductName()).build();
+				productRepo.save(updateProduct);
+				return updateProduct;
+			}
+			return new ProductEntity(null,null,null);
+	}
+
+	public Optional<ProductEntity> deleteProduct(Long id) {
+		//System.out.println("Status.. "+products.remove(getProduct(id)));
+		Optional<ProductEntity> deletedProduct=productRepo.findById(id);
+		if (deletedProduct.isPresent()){
+			productRepo.deleteById(id);
+			return deletedProduct;
 		}
-
-		return null;
-	}
-	
-	public void createProduct(Long productID, String productName, Integer price) {
-		products.add(new Product(productID, productName, price));
-	}
-	
-	public void updateProduct(Product product) {
-		
-		getProduct(product.getProductID()).setProductPrice(product.getProductPrice());
-		getProduct(product.getProductID()).setProductName(product.getProductName());
-
-	}
-	
-
-	public void deleteProduct(Long id) {
-		System.out.println("Status.. "+products.remove(getProduct(id)));
-		
+		return deletedProduct;
 	}
 }

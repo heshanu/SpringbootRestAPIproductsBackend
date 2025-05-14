@@ -13,3 +13,8 @@ spring:
     hibernate:
       ddl-auto: update
   application:
+
+app:
+  jwt:
+    secret: ThisIsAVeryStrongSecretThatIsAtLeast64CharactersLong1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    expiration-in-ms: 86400000
