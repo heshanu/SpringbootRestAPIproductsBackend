@@ -108,4 +108,12 @@ public class ProductController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Map<String, Object>> deleteProductFour(@PathVariable("id") Long id) {
+		productService.deleteProduct(id);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", "Product deleted!");
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+
 }
