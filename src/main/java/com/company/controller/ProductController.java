@@ -55,9 +55,14 @@ public class ProductController {
 	}
 
 	@GetMapping()
-	public String sayHello(){
+	public String sayHello() {
 		return "Hi";
+	}
 
+	@GetMapping()
+	public String sayHelloTwo() {
+		return "Hi";
+	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Map<String, Object>> deleteProductOne(@PathVariable("id") Long id) {
