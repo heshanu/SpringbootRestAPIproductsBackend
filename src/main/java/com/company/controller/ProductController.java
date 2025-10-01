@@ -54,4 +54,9 @@ public class ProductController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
+	@GetMapping()
+	public String sayHello(){
+		return "Hi";
+	}
+
 }
