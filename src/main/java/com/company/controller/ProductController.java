@@ -84,6 +84,11 @@ public class ProductController {
 		return "Hi";
 	}
 
+	@GetMapping()
+	public String sayHelloEight(){
+		return "Hi";
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Map<String, Object>> deleteProductOne(@PathVariable("id") Long id) {
 		productService.deleteProduct(id);
